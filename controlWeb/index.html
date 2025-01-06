@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toggle Button</title>
+    <script type="module">
+      // Import Firebase and configuration
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+    import { firebaseConfig } from "./firebaseConfig.js"; // Adjust path as needed
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+
+      // button func
+      const button = document.getElementById("toggleButton");
+      const stateDisplay = document.getElementById("stateDisplay");
+
+      // write data ke firebase
+      function writeStateToFirebase(state) {
+        const stateRef = ref(database, 'toggleState/state');
+        set(stateRef, state);
+      }
+
+      // switch on off
+      function updateUI(state) {
+        button.textContent = state ? "OFF" : "ON";
+        stateDisplay.textContent = `Current state: ${state ? "ON" : "OFF"}`;
+      }
+
+      // Fetch the current state from Firebase
+      function fetchStateFromFirebase() {
+        const stateRef = ref(database, 'toggleState/state');
+        get(stateRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const currentState = snapshot.val();
+            updateUI(currentState);  // update ui
+          } else {
+            updateUI(false);
+            writeStateToFirebase(false);
+          }
+        });
+      }
+
+      button.addEventListener('click', function() {
+        const newState = button.textContent === "OFF" ? false : true;
+
+        // Update the button and display based on the new state
+        updateUI(newState);
+
+        // Write the new state to Firebase
+        writeStateToFirebase(newState);
+      });
+
+      // Initial load of state from Firebase
+      fetchStateFromFirebase();
+    </script>
+</head>
+<body>
+    <button id="toggleButton">Loading...</button>
+    <p id="stateDisplay">Current state: </p>
+</body>
+</html>
