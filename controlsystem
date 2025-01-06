@@ -6,7 +6,7 @@ const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
 // Sumber firebase database
-const String firebaseUrl = "https://pbrinformatika-default-rtdb.firebaseio.com/toggleState/state.json";  // URL to read the state
+const String firebaseUrl = "";  // URL to read the state
 
 int ledPin = 2; // Pin LED
 
