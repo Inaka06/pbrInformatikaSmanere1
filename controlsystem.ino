@@ -6,7 +6,7 @@ const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
 // Sumber firebase database
-const String firebaseUrl = "";  // URL to read the state
+const String firebaseUrl = "";  // url firebase masukkan sini
 
 int ledPin = 2; // Pin LED
 
@@ -26,19 +26,17 @@ void setup() {
 }
 
 void loop() {
-  // Create an HTTPClient object
   HTTPClient http;
 
   http.begin(firebaseUrl);  // fetch data firebase
 
-  int httpCode = http.GET();  // Send the GET request
+  int httpCode = http.GET();  
 
-  if (httpCode == 200) {  // If the request was successful
+  if (httpCode == 200) {  
     String payload = http.getString();
     Serial.println("Received data from Firebase:");
     Serial.println(payload);  
 
-    // Example of parsing JSON (payload will be the state as true or false)
     if (payload == "true") {
       Serial.println("Turn ON LED");
       digitalWrite(ledPin, HIGH); //hidupkan LED
@@ -55,3 +53,4 @@ void loop() {
 
   delay(1000); //delay 1000ms
 }
+
